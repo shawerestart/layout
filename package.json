@@ -106,5 +106,8 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
+  },
+  "github": {
+    "release": false
   }
 }
