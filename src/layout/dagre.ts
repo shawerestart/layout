@@ -83,7 +83,8 @@ export class DagreLayout extends Base {
         if (d.size) {
           if (isArray(d.size)) {
             return d.size;
-          }  if (isObject(d.size)) {
+          }
+          if (isObject(d.size)) {
             return [d.size.width || 40, d.size.height || 40];
           }
           return [d.size, d.size];
@@ -106,23 +107,25 @@ export class DagreLayout extends Base {
     g.setGraph(self);
 
     const comboMap: { [key: string]: boolean } = {};
-    nodes.filter((node) => node.layout !== false).forEach((node) => {
-      const size = nodeSizeFunc(node);
-      const verti = vertisep(node);
-      const hori = horisep(node);
-      const width = size[0] + 2 * hori;
-      const height = size[1] + 2 * verti;
-      g.setNode(node.id, { width, height });
+    nodes
+      .filter((node) => node.layout !== false)
+      .forEach((node) => {
+        const size = nodeSizeFunc(node);
+        const verti = vertisep(node);
+        const hori = horisep(node);
+        const width = size[0] + 2 * hori;
+        const height = size[1] + 2 * verti;
+        g.setNode(node.id, { width, height });
 
-      if (this.sortByCombo && node.comboId) {
-        if (!comboMap[node.comboId]) {
-          comboMap[node.comboId] = true;
-          g.setNode(node.comboId, {});
+        if (this.sortByCombo && node.comboId) {
+          if (!comboMap[node.comboId]) {
+            comboMap[node.comboId] = true;
+            g.setNode(node.comboId, {});
+          }
+          g.setParent(node.id, node.comboId);
         }
-        g.setParent(node.id, node.comboId);
-      }
-    });
-    
+      });
+
     if (this.sortByCombo && combos) {
       combos.forEach((combo) => {
         if (!combo.parentId) return;
@@ -136,8 +139,8 @@ export class DagreLayout extends Base {
 
     edges.forEach((edge) => {
       // dagrejs Wiki https://github.com/dagrejs/dagre/wiki#configuring-the-layout
-      const source = getEdgeTerminal(edge, 'source');
-      const target = getEdgeTerminal(edge, 'target');
+      const source = getEdgeTerminal(edge, "source");
+      const target = getEdgeTerminal(edge, "target");
       g.setEdge(source, target, {
         weight: edge.weight || 1,
       });
@@ -154,11 +157,11 @@ export class DagreLayout extends Base {
     g.edges().forEach((edge: any) => {
       coord = g.edge(edge);
       const i = edges.findIndex((it) => {
-        const source = getEdgeTerminal(it, 'source');
-        const target = getEdgeTerminal(it, 'target');
+        const source = getEdgeTerminal(it, "source");
+        const target = getEdgeTerminal(it, "target");
         return source === edge.v && target === edge.w;
       });
-      if (self.controlPoints && edges[i].type !== "loop") {
+      if (edges[i] && self.controlPoints && edges[i].type !== "loop") {
         edges[i].controlPoints = coord.points.slice(1, coord.points.length - 1);
       }
     });
